@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 [ExecuteInEditMode, ImageEffectAllowedInSceneView]
 public class FractalMaster : MonoBehaviour {
@@ -6,8 +7,8 @@ public class FractalMaster : MonoBehaviour {
     public ComputeShader fractalShader;
 
     [Range (1, 20)]
-    public float fractalPower = 10;
-    public float darkness = 70;
+    public float fractalPower = 0;
+    public float darkness = 50;
 
     [Header ("Colour mixing")]
     [Range (0, 1)] public float blackAndWhite;
@@ -38,8 +39,32 @@ public class FractalMaster : MonoBehaviour {
     void Update () {
         if (Application.isPlaying) {
             fractalPower += powerIncreaseSpeed * Time.deltaTime;
+            if (Input.GetButton("Quit")){
+                Application.Quit();
+            }
+            if (Input.GetButton("Reset")){
+                fractalPower = 0;
+                SetParameters();
+            }
+            if (Input.GetButton("SpeedUp")){
+                powerIncreaseSpeed = powerIncreaseSpeed + 0.1f;
+                SetParameters();
+            }
+            if (Input.GetButton("SpeedDn")){
+                powerIncreaseSpeed = powerIncreaseSpeed - 0.1f;
+                SetParameters();
+            }
+            if (Input.GetButton("DarkUp")){
+                darkness = darkness + 1;
+                SetParameters();
+            }
+            if (Input.GetButton("DarkDn")){
+                darkness = darkness - 1;
+                SetParameters();
+            }
         }
     }
+
 
     void OnRenderImage (RenderTexture source, RenderTexture destination) {
         Init ();
